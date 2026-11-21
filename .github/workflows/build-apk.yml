@@ -8,14 +8,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 关键修复：告诉 Actions 所有的 run 命令都在 dsh-go 目录下执行
-    defaults:
-      run:
-        working-directory: dsh-go
-        
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Debug Directory Structure
+        run: |
+          echo "当前所在的根目录是: $(pwd)"
+          echo "根目录下的文件列表:"
+          ls -la
 
       - name: Cache Flutter and Android SDK
         uses: actions/cache@v3
@@ -32,6 +33,15 @@ jobs:
 
       - name: Setup Environment and Build
         run: |
+          # 自动探测目录：如果有 dsh-go 文件夹就进去，没有说明已经在根目录了
+          if [ -d "dsh-go" ]; then
+            echo "找到 dsh-go 目录，进入..."
+            cd dsh-go
+          else
+            echo "未找到 dsh-go 目录，假设当前就是项目根目录..."
+          fi
+          
+          # 执行构建
           bash tooling/setup-toolchain.sh
           source tooling/env.sh
           bash runtime/build-runtime.sh arm64-v8a
@@ -41,5 +51,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dsh-go-privacy-apk
-          # 注意：上传产物的路径是相对于仓库根目录的，所以必须带上 dsh-go/
-          path: dsh-go/app/build/app/outputs/flutter-apk/*.apk
+          # 使用 **/ 通配符递归搜索，无论生成在哪个子目录都能抓到
+          path: '**/flutter-apk/*.apk'
