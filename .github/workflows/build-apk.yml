@@ -12,12 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug Directory Structure
-        run: |
-          echo "当前所在的根目录是: $(pwd)"
-          echo "根目录下的文件列表:"
-          ls -la
-
       - name: Cache Flutter and Android SDK
         uses: actions/cache@v3
         with:
@@ -33,23 +27,25 @@ jobs:
 
       - name: Setup Environment and Build
         run: |
-          # 自动探测目录：如果有 dsh-go 文件夹就进去，没有说明已经在根目录了
+          # 1. 注入终极防遥测环境变量
+          export DSH_TELEMETRY_DISABLED=1
+          
+          # 2. 自动进入正确的目录
           if [ -d "dsh-go" ]; then
-            echo "找到 dsh-go 目录，进入..."
             cd dsh-go
-          else
-            echo "未找到 dsh-go 目录，假设当前就是项目根目录..."
           fi
           
-          # 执行构建
+          # 3. 安装环境并编译
           bash tooling/setup-toolchain.sh
           source tooling/env.sh
           bash runtime/build-runtime.sh arm64-v8a
+          
+          # 4. 执行打包
           DSH_BETA_TOKEN_FILE= bash tooling/build-apk.sh -f arm64 --keep-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: dsh-go-privacy-apk
-          # 使用 **/ 通配符递归搜索，无论生成在哪个子目录都能抓到
+          # 使用 **/ 递归寻找所有生成的 APK
           path: '**/flutter-apk/*.apk'
