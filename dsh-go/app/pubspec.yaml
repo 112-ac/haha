@@ -178,9 +178,9 @@ flutter:
     # Glass-gradient feature tiles (lib/ui/common/feature_tile.dart), 288px WebP.
     # The vector styles' SVG masters in assets/tiles/ are not bundled.
     - assets/tiles/glassy/
-    - assets/pets/deepy-whale/
-    - assets/pets/whale-girl/
-    - assets/pets/pink-fish/
+    # - assets/pets/deepy-whale/
+    # - assets/pets/whale-girl/
+    # - assets/pets/pink-fish/
     # The star prompt's whale girl (lib/ui/star/star_prompt_dialog.dart), 576px WebP.
     - assets/star/
     - assets/islands/
@@ -192,7 +192,7 @@ flutter:
     - assets/skills/dsh-go-guide/
     - assets/skills/dsh-go-support/
     - assets/skills/companion-adapt/
-    - assets/skills/pet-theme/
+    # - assets/skills/pet-theme/
 
 
   # To add assets to your application, add an assets section, like this:

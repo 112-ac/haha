@@ -1,0 +1,54 @@
+name: Build Privacy APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache Flutter and Android SDK
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.android
+            ~/.gradle
+            ~/.pub-cache
+            ~/flutter
+            ~/android-sdk
+          key: ${{ runner.os }}-dshgo-v1-${{ hashFiles('**/pubspec.lock', '**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-dshgo-v1-
+
+      - name: Setup Environment and Build
+        run: |
+          # 1. 注入防遥测环境变量
+          export DSH_TELEMETRY_DISABLED=1
+          
+          # 2. 网络容错配置：强制 HTTP/1.1 并增加重试
+          git config --global http.version HTTP/1.1
+          export CURL_HTTP_VERSION=1.1
+          
+          # 3. 自动进入目录
+          if [ -d "dsh-go" ]; then
+            cd dsh-go
+          fi
+          
+          # 4. 安装环境并编译
+          bash tooling/setup-toolchain.sh
+          source tooling/env.sh
+          bash runtime/build-runtime.sh arm64-v8a
+          
+          # 5. 执行打包
+          DSH_BETA_TOKEN_FILE= bash tooling/build-apk.sh -f arm64 --keep-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-go-privacy-apk
+          path: '**/flutter-apk/*.apk'

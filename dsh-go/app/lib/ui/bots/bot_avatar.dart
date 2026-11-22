@@ -25,7 +25,7 @@ Color botNameInk(BuildContext context, String color) => botInk(context, color ==
 /// [working] adds a breathing dot at the lower right of a photo or letter; the
 /// little bot hops instead.
 class BotAvatar extends ConsumerWidget {
-  const BotAvatar({super.key, required this.bot, this.size = 40, this.working = false, this.mascot = true});
+  const BotAvatar({super.key, required this.bot, this.size = 40, this.working = false, this.mascot = false});
 
   final DsBot bot;
   final double size;
@@ -52,7 +52,7 @@ class BotAvatar extends ConsumerWidget {
             excludeFromSemantics: true,
           )
         : BotMonogram(name: bot.name, color: bot.ink, size: size);
-    if (photo == null && mascot) return ExcludeSemantics(child: fallback);
+    // if (photo == null && mascot) return ExcludeSemantics(child: fallback);
     final face = photo == null
         ? fallback
         : ClipOval(

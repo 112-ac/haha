@@ -182,7 +182,7 @@ class _DshAppState extends ConsumerState<DshApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       theme: _light,
       darkTheme: _dark,
-      themeMode: themeMode,
+      themeMode: ThemeMode.dark,
       // Palette and light / dark changes cross-fade the whole app (AppMotion).
       // A reveal from the finger brings the new colours in itself.
       // Never AnimationStyle.noAnimation: MaterialApp then swaps AnimatedTheme for Theme, and

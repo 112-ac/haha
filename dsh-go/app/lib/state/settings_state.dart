@@ -101,7 +101,7 @@ class AppSettings {
     bool? loaded,
   }) => AppSettings(
     apiKey: apiKey ?? this.apiKey,
-    themeMode: themeMode ?? this.themeMode,
+    themeMode: this.themeMode,
     autoStartLocal: autoStartLocal ?? this.autoStartLocal,
     autoStartLocalExplicit: autoStartLocalExplicit ?? this.autoStartLocalExplicit,
     autoApproveCommands: autoApproveCommands ?? this.autoApproveCommands,
@@ -172,10 +172,7 @@ class SettingsController extends Notifier<AppSettings> {
     if (!ref.mounted) return;
     state = AppSettings(
       apiKey: apiKey,
-      themeMode: ThemeMode.values.firstWhere(
-        (m) => m.name == prefs.getString(_themeKey),
-        orElse: () => ThemeMode.system,
-      ),
+      themeMode: ThemeMode.dark,
       autoStartLocal: prefs.getBool(_autoStartKey) ?? ref.read(performanceDefaultsProvider).autoStartLocal,
       autoStartLocalExplicit: prefs.containsKey(_autoStartKey),
       autoApproveCommands: prefs.getBool(_autoApproveKey) ?? false,

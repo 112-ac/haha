@@ -838,7 +838,7 @@ class PetLayerState extends ConsumerState<PetLayer> with TickerProviderStateMixi
     final pack = _pack;
     if (pack == null) return;
     ref.read(petInteractionProvider.notifier).touch();
-    await showPetMenu(context, pack: pack);
+    // await showPetMenu(context, pack: pack);
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -853,6 +853,7 @@ class PetLayerState extends ConsumerState<PetLayer> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
+    return const SizedBox.shrink();
     final pack = ref.watch(currentPetPackProvider);
     final prefs = ref.watch(petPrefsProvider);
     final pet = ref.watch(petScopedStateProvider(_scope));
