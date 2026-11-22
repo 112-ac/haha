@@ -12,7 +12,7 @@ const isSystem = request => request.action.kind.startsWith('system-');
 const SYSTEM_RESULT_BYTES = 32768;
 const RESULT_BYTES = 16384;
 const BROWSER_RESULT_BYTES = 512 * 1024;
-const BROWSER_IMAGE_BYTES = 1200 * 1024;
+const BROWSER_IMAGE_BYTES = 100 * 1024;
 const BODY_BYTES = 32768;
 const RESULT_BODY_BYTES = 2 * 1024 * 1024;
 // Someone signing in to a site takes longer than someone answering a prompt.

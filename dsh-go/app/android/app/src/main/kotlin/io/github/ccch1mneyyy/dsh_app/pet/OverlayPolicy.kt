@@ -100,7 +100,7 @@ enum class PetMenuItem {
         fun of(push: PetPush?, screenshots: Boolean): List<PetMenuItem> = buildList {
             add(ASK)
             add(NEW_CHAT)
-            if (screenshots) add(SCREENSHOT)
+            // if (screenshots) add(SCREENSHOT)
             if (push?.canStop == true) add(STOP)
             if ((push?.hosts?.size ?: 0) > 1) add(SWITCH_HOST)
             add(SNOOZE)

@@ -207,6 +207,20 @@ internal object TreeCapture {
             @Suppress("DEPRECATION")
             if (Build.VERSION.SDK_INT < 33) all.orEmpty().forEach { runCatching { it.recycle() } }
         }
+        // 统计当前抓取到的有效节点数量
+        var validNodeCount = 0
+        st.natives.forEach { node ->
+            if (!node.text.isNullOrEmpty() || !node.contentDescription.isNullOrEmpty() || node.isClickable) {
+                        validNodeCount++
+            }
+        }
+
+        // 判定为复杂图像/节点过少时，注入提示语
+        val finalUnreadable = if (validNodeCount < 3) {
+            "系统提示：当前界面缺乏标准无障碍控件（可能是复杂图像或游戏），请停止盲目操作，并提示用户长按悬浮窗手动截图。"
+        } else {
+            unreadable
+        }
         return Capture(
             windows = chosen,
             natives = st.natives,
@@ -218,7 +232,7 @@ internal object TreeCapture {
             truncated = st.truncated,
             partial = st.partial,
             hiddenWindowTitle = hidden,
-            unreadableWindowTitle = unreadable,
+            unreadableWindowTitle = finalUnreadable,
             visualWindowId = visual?.first,
             visualComplete = visual?.second == true && st.visualComplete && !st.truncated && !st.partial &&
                 hidden == null && unreadable == null && chosen.size == 1 && chosen.single().id == visual?.first,

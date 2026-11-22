@@ -197,15 +197,6 @@
     }
   },
   {
-    "name": "screenshot",
-    "description": "请求Host当前独立浏览器截图；返回和隐私/字节限制由Host执行，本页面脚本不截图。",
-    "inputSchema": {
-      "type": "object",
-      "properties": {},
-      "additionalProperties": false
-    }
-  },
-  {
     "name": "back",
     "description": "请求Host后退；导航仍须经过Host目的地、批准和状态核验。",
     "inputSchema": {

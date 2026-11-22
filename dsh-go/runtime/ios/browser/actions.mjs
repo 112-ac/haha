@@ -43,7 +43,7 @@ export function actionFor(name, args = {}) {
     if (!Number.isSafeInteger(maxBytes) || maxBytes < 2048 || maxBytes > 262144) throw invalid();
     return { kind: 'browser-read', maxBytes };
   }
-  if (['screenshot', 'back', 'close'].includes(tool)) {
+  if (['back', 'close'].includes(tool)) {
     keys(args, []); return { kind: `browser-${tool}` };
   }
   if (tool === 'handoff') {
