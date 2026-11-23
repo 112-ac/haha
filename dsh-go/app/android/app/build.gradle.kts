@@ -82,6 +82,20 @@ android {
         targetSdk = 28
         versionCode = flutter.versionCode.takeIf { it > 1 } ?: buildMinuteVersionCode()
         versionName = flutter.versionName
+
+        ndk{
+            abiFilters.clear()
+            abiFilters.add("arm64-v8a")
+        }
+    }
+    
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            excludes += "lib/armeabi-v7a/**"
+            excludes += "lib/x86/**"
+            excludes += "lib/x86_64/**"
+        }
     }
 
     flavorDimensions += "abi"
