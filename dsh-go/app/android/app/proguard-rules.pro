@@ -26,3 +26,5 @@
 -dontwarn org.bouncycastle.**
 -keep class org.conscrypt.** { *; }
 -keep class io.github.muntashirakon.adb.** { *; }
+# 保留原有的包结构，防止 AGP 9.1.1 默认 R8 行为改变导致的反射问题
+-dontrepackage

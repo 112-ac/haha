@@ -51,7 +51,7 @@
     <!-- The rootfs contains plaintext credentials; exclude it from Android backup.
          TODO(targetSdk >= 31): also configure dataExtractionRules. -->
     <application    
-        againndroid:allowBackup="false"
+        android:allowBackup="false"
         android:label="${appLabel}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

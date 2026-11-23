@@ -1,8 +1,8 @@
 allprojects {
     configurations.all {
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.android.gms', module: 'play-services-ads-identifier'
+        exclude(group = "com.google.firebase", module = "firebase-analytics")
+        exclude(group = "com.google.firebase", module = "firebase-core")
+        exclude(group = "com.google.android.gms", module = "play-services-ads-identifier")
     }
     repositories {
         if (System.getenv("DSH_MAVEN_MIRRORS") != "0") {
