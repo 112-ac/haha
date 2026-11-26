@@ -11,15 +11,13 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        // Keep local mirror defaults; cloud CI can use the official upstreams.
-        if (System.getenv("DSH_MAVEN_MIRRORS") != "0") {
-            maven { url = uri("https://maven.aliyun.com/repository/google") }
-            maven { url = uri("https://maven.aliyun.com/repository/central") }
-            maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
-        }
         google()
         mavenCentral()
         gradlePluginPortal()
+
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/central") }
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
     }
 }
 
