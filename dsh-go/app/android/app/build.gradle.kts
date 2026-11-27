@@ -89,15 +89,6 @@ android {
         }
     }
     
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-            excludes += "lib/armeabi-v7a/**"
-            excludes += "lib/x86/**"
-            excludes += "lib/x86_64/**"
-        }
-    }
-
     flavorDimensions += "abi"
     productFlavors {
         create("arm64") {
@@ -125,7 +116,11 @@ android {
             // (sherpa's own build): either serves both, with the same exports.
             pickFirsts += "**/libonnxruntime.so"
             // Keep the Termux binaries byte-identical to runtime/out (their hashes are in the manifest).
-            keepDebugSymbols += listOf("**/libproot.so", "**/libproot-loader.so", "**/libtalloc.so", "**/libandroid-shmem.so", "**/libtawcroot.so")
+            keepDebugSymbols += listOf("**/*.so")
+
+            excludes += "lib/armeabi-v7a/**"
+            excludes += "lib/x86/**"
+            excludes += "lib/x86_64**"
         }
     }
 
@@ -159,6 +154,9 @@ android {
             // tooling/dev-run.sh installs debug over the release build on a phone, data
             // kept: Android only allows that with the same key.
             if (hasWholeReleaseKey) signingConfig = signingConfigs.getByName("release")
+            ndk{
+                debugSymbolLevel = "NONE"
+            }
         }
         release {
             // Use the release key when configured; local builds without key.properties fall back to debug.

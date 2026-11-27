@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+// import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../l10n/l10n.dart';
 import '../../remote/relay/relay_backend.dart';
@@ -598,121 +598,12 @@ class _CameraScanner extends StatefulWidget {
 }
 
 class _CameraScannerState extends State<_CameraScanner> {
-  final _controller = MobileScannerController(
-    formats: const [BarcodeFormat.qrCode],
-    detectionSpeed: DetectionSpeed.noDuplicates,
-  );
-  bool _reported = false;
-  late final Future<void> _initialization;
-
-  @override
-  void initState() {
-    super.initState();
-    // Android disables ML Kit's eager provider for OCR privacy. Both the camera
-    // and photo decoder need the shared SDK before mobile_scanner uses it.
-    _initialization = !kIsWeb && defaultTargetPlatform == TargetPlatform.android
-        ? const MethodChannel('dsh/app').invokeMethod<void>('initializePairingScanner')
-        : Future<void>.value();
-  }
-
-  @override
-  void dispose() {
-    unawaited(_controller.dispose());
-    super.dispose();
-  }
-
-  void _report(BarcodeCapture capture) {
-    if (!mounted || _reported) return;
-    for (final code in capture.barcodes) {
-      final text = code.rawValue;
-      if (text == null || text.isEmpty) continue;
-      _reported = true;
-      unawaited(_controller.stop());
-      widget.onCode(text);
-      return;
-    }
-  }
-
-  /// A screenshot of the code instead of the camera (no camera permission).
-  Future<void> _fromImage() async {
-    final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    final XFile? picked;
-    try {
-      picked = await ImagePicker().pickImage(source: ImageSource.gallery, requestFullMetadata: false);
-    } catch (_) {
-      messenger?.showSnackBar(SnackBar(content: Text(l10n.remotePairImageNoCode)));
-      return;
-    }
-    if (picked == null || !mounted) return;
-    BarcodeCapture? capture;
-    try {
-      await _initialization;
-      if (!mounted) return;
-      capture = await _controller.analyzeImage(picked.path, formats: const [BarcodeFormat.qrCode]);
-    } catch (_) {
-      if (mounted) messenger?.showSnackBar(SnackBar(content: Text(l10n.remotePairScannerFailed)));
-      return;
-    }
-    if (!mounted) return;
-    if (capture == null || capture.barcodes.every((b) => (b.rawValue ?? '').isEmpty)) {
-      messenger?.showSnackBar(SnackBar(content: Text(l10n.remotePairImageNoCode)));
-      return;
-    }
-    _report(capture);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        FutureBuilder<void>(
-          future: _initialization,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return _CameraUnavailable(message: l10n.remotePairScannerFailed);
-            }
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return MobileScanner(
-              controller: _controller,
-              onDetect: _report,
-              errorBuilder: (context, error) => _CameraUnavailable(
-                message: error.errorCode == MobileScannerErrorCode.permissionDenied
-                    ? l10n.remotePairCameraDenied
-                    : l10n.remotePairCameraFailed,
-              ),
-            );
-          },
-        ),
-        const IgnorePointer(child: CustomPaint(painter: _FramePainter())),
-        Positioned(
-          right: 10,
-          bottom: 10,
-          child: Material(
-            color: Colors.black.withValues(alpha: 0.45),
-            shape: const StadiumBorder(),
-            child: InkWell(
-              customBorder: const StadiumBorder(),
-              onTap: () => unawaited(_fromImage()),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(AppIcons.gallery, size: 16, color: Colors.white),
-                    const SizedBox(width: 6),
-                    Text(l10n.remotePairFromImage, style: const TextStyle(color: Colors.white, fontSize: 13)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return const Scaffold(
+      body: Center(
+        child: Text('扫码功能已移除'),
+      ),
     );
   }
 }

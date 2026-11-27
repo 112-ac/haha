@@ -71,8 +71,8 @@ dependencies:
   # Bundles ORT 1.27.0, the version of the Android ORT dependency (one
   # libonnxruntime.so serves both). Keep every piece exact: a newer one brings
   # another ORT, whose symbols the other side does not link.
-  sherpa_onnx: 1.13.4
-  sherpa_onnx_android_arm64: 1.13.4
+  #sherpa_onnx: 1.13.4
+  #sherpa_onnx_android_arm64: 1.13.4
   # AES-256-GCM for hosted conversation links (lib/share_hosted), the pure-Dart
   # implementation packages/dsh_remote already uses. Apache-2.0.
   cryptography: ^2.9.0
@@ -91,11 +91,11 @@ dependencies:
   pointycastle: ^4.0.0
   # WebRTC DataChannel for DSH Remote's direct (P2P / TURN) path; the transport
   # logic lives in packages/dsh_remote. MIT, bundles libwebrtc (BSD-3).
-  flutter_webrtc: ^1.6.3
+  # flutter_webrtc: ^1.6.3
   archive: ^4.6.0
   # Full image decoding in the pet importer's background isolate. MIT.
   image: 4.12.0
-  mobile_scanner: ^7.5.0
+  # mobile_scanner: ^7.5.0
 
 dev_dependencies:
   flutter_test:
@@ -189,7 +189,6 @@ flutter:
     - assets/skills/dsh-go-guide/
     - assets/skills/dsh-go-support/
     - assets/skills/companion-adapt/
-    - assets/runtime/
     # - assets/skills/pet-theme/
 
 
